@@ -1,5 +1,4 @@
 // global definations
-
 var MainDiv = document.getElementById("mainDiv");
 
 var locationX = 0;
@@ -7,6 +6,14 @@ var locationY = 0;
 
 let width = 0;
 let height = 0;
+
+var moveUpID;
+var moveDownID;
+var moveRightID;
+var moveLeftID;
+
+var zeroIndexX;
+var zeroIndexY;
 
 // array definations
 const arrayRows = 4;
@@ -16,6 +23,15 @@ var index = 0;
 
 var PuzzleArray = [];
 var tempArray = [];
+
+const shuffleArray = array => {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
 
 // initialize the array
 for (i = 0; i < arrayRows; i++) {
@@ -39,11 +55,13 @@ PuzzleArray.forEach((row) => {
         // if the index is 0, no value shown 
         if (line === 0) {
             PuzzlePiece.style.background = "#FFF";
+            PuzzlePiece.style.border = "2px solid white";
         }
         // otherwise write the number on piece
         else {
             PuzzlePiece.textContent = line;
-            PuzzlePiece.onclick = function () { myFunction(line) }
+            PuzzlePiece.id = line;
+            PuzzlePiece.onclick = function () { pieceClick(line) }
         }
 
         // set styles and append
@@ -65,6 +83,82 @@ PuzzleArray.forEach((row) => {
     locationY += height;
 });
 
-function myFunction(index) {
-    console.log(index);
+function pieceClick(index) {
+    findMovablePieces();
+
+    var movingPiece = document.getElementById(index);
+    var moveToPx;
+
+    if (index == moveLeftID) {
+        moveToPx = movingPiece.style.left.replace("px", "");
+        moveToPx += width;
+        movingPiece.style.left = moveToPx + "px";
+    }
+    if (index == moveRightID) {
+        moveToPx = movingPiece.style.left.replace("px", "");
+        moveToPx -= width;
+        movingPiece.style.left = moveToPx + "px";
+    }
+    if (index == moveUpID) {
+        moveToPx = movingPiece.style.left.replace("px", "");
+        moveToPx += height;
+        movingPiece.style.top = moveToPx + "px";
+    }
+    if (index == moveDownID) {
+        moveToPx = movingPiece.style.left.replace("px", "");
+        moveToPx -= height;
+        movingPiece.style.top = moveToPx + "px";
+    }
 }
+
+function findMovablePieces() {
+    for (let i = 0; i < arrayRows; i++) {
+        if (PuzzleArray[i].includes(0)) {
+            zeroIndexX = PuzzleArray[i].indexOf(0);
+            zeroIndexY = i;
+        }
+    }
+
+    console.log("zeroIndexX: " + zeroIndexX);
+    console.log("zeroIndexY: " + zeroIndexY);
+
+    // if far left
+    if (zeroIndexX == 0) {
+        moveLeftID = 0; // disable button left
+    }
+    else {
+        moveLeftID = zeroIndexX - 1;
+    }
+
+    // if far right
+    if (zeroIndexX == arrayColumns) {
+        moveRightID = 0; // disable button right
+    }
+    else {
+        moveRightID = zeroIndexX + 1;
+    }
+
+    // if far top
+    if (zeroIndexY == 0) {
+        moveUpID = 0; // disable button top
+    }
+    else {
+        moveUpID = zeroIndexY - 1;
+    }
+
+    // if far low
+    if (zeroIndexY == arrayRows) {
+        moveDownID = 0; // disable button below
+    }
+    else {
+        moveDownID = zeroIndexY + 1;
+    }
+
+    console.log("moveLeftID: " + moveLeftID);
+    console.log("moveRightID: " + moveRightID);
+    console.log("moveUpID: " + moveUpID);
+    console.log("moveDownID: " + moveDownID);
+}
+
+// run find movable pieces once in start
+findMovablePieces();
