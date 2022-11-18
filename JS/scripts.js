@@ -20,23 +20,17 @@ const moveLeft = 3;
 var zeroIndexX;
 var zeroIndexY;
 
+let promptOutputRows = parseInt(prompt("Please enter how many rows you want", "3"));
+let promptOutputColumns = parseInt(prompt("Please enter how many colums you want", "3"));
+
 // array definations
-const arrayRows = 5;
-const arrayColumns = 5;
+const arrayRows = promptOutputRows;
+const arrayColumns = promptOutputColumns;
 var i, j;
 var index = 0;
 
 var PuzzleArray = [];
 var tempArray = [];
-
-const shuffleArray = array => {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        const temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-}
 
 // initialize the array
 for (i = 0; i < arrayRows; i++) {
@@ -89,11 +83,13 @@ PuzzleArray.forEach((row) => {
 });
 
 function pieceClick(index) {
+    // get placement of zero
     findMovablePieces();
 
     var movingPiece = document.getElementById(index);
     var moveToPx;
 
+    // move the pieces
     if (index == moveLeftID) {
         moveToPx = parseInt(movingPiece.style.left.replace("px", ""));
         moveToPx += parseInt(width);
@@ -115,10 +111,12 @@ function pieceClick(index) {
         movingPiece.style.top = moveToPx + "px";
     }
 
+    // update placement of zero
     updateZeroPlacement(index);
 
+    // winning screen
     if (checkIfComplete()) {
-        alert("Yay you win!");
+        alert("The winner is you!");
     }
 }
 
