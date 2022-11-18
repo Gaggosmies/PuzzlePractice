@@ -1,0 +1,20 @@
+#mainDiv{
+    position: relative;
+}
+
+.piece {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    background-color: aqua;
+    border: 2px solid black;
+    cursor: pointer;
+    
+    user-drag: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
