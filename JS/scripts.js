@@ -100,12 +100,12 @@ function pieceClick(index) {
         movingPiece.style.left = moveToPx + "px";
     }
     if (index == moveUpID) {
-        moveToPx = movingPiece.style.left.replace("px", "");
+        moveToPx = movingPiece.style.top.replace("px", "");
         moveToPx += height;
         movingPiece.style.top = moveToPx + "px";
     }
     if (index == moveDownID) {
-        moveToPx = movingPiece.style.left.replace("px", "");
+        moveToPx = movingPiece.style.top.replace("px", "");
         moveToPx -= height;
         movingPiece.style.top = moveToPx + "px";
     }
@@ -127,7 +127,7 @@ function findMovablePieces() {
         moveLeftID = 0; // disable button left
     }
     else {
-        moveLeftID = zeroIndexX - 1;
+        moveLeftID = PuzzleArray[zeroIndexY][zeroIndexX-1];
     }
 
     // if far right
@@ -135,7 +135,7 @@ function findMovablePieces() {
         moveRightID = 0; // disable button right
     }
     else {
-        moveRightID = zeroIndexX + 1;
+        moveRightID = PuzzleArray[zeroIndexY][zeroIndexX+1];
     }
 
     // if far top
@@ -143,7 +143,7 @@ function findMovablePieces() {
         moveUpID = 0; // disable button top
     }
     else {
-        moveUpID = zeroIndexY - 1;
+        moveUpID = PuzzleArray[zeroIndexY-1][zeroIndexX];
     }
 
     // if far low
@@ -151,7 +151,7 @@ function findMovablePieces() {
         moveDownID = 0; // disable button below
     }
     else {
-        moveDownID = zeroIndexY + 1;
+        moveDownID = PuzzleArray[zeroIndexY+1][zeroIndexX];
     }
 
     console.log("moveLeftID: " + moveLeftID);
