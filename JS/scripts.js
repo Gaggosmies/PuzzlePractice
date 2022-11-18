@@ -119,6 +119,7 @@ function pieceClick(index) {
 }
 
 function findMovablePieces() {
+    // Find the 0
     for (let i = 0; i < arrayRows; i++) {
         if (PuzzleArray[i].includes(0)) {
             zeroIndexX = PuzzleArray[i].indexOf(0);
@@ -126,12 +127,10 @@ function findMovablePieces() {
         }
     }
 
-    // console.log("zeroIndexX: " + zeroIndexX);
-    // console.log("zeroIndexY: " + zeroIndexY);
+    // find all the pieces around the 0
 
     // if far left
     if (zeroIndexX == 0) {
-        console.log("left");
         moveLeftID = 0; // disable button left
     }
     else {
@@ -140,7 +139,6 @@ function findMovablePieces() {
 
     // if far right
     if (zeroIndexX > arrayColumns) {
-        console.log("right");
         moveRightID = 0; // disable button right
     }
     else {
@@ -149,7 +147,6 @@ function findMovablePieces() {
 
     // if far top
     if (zeroIndexY == 0) {
-        console.log("top");
         moveUpID = 0; // disable button top
     }
     else {
@@ -158,17 +155,11 @@ function findMovablePieces() {
 
     // if far low
     if (zeroIndexY == arrayRows - 1) {
-        console.log("below");
         moveDownID = 0; // disable button below
     }
     else {
         moveDownID = PuzzleArray[zeroIndexY + 1][zeroIndexX];
     }
-
-    // console.log("moveLeftID: " + moveLeftID);
-    // console.log("moveRightID: " + moveRightID);
-    // console.log("moveUpID: " + moveUpID);
-    // console.log("moveDownID: " + moveDownID);
 }
 
 // run find movable pieces once in start
@@ -184,24 +175,14 @@ function updateZeroPlacement(index) {
     if (index == moveRightID) { functionality = moveLeft };
 
     if (typeof functionality === 'undefined'){
-        console.log("Returning...");
         return;
     }
-
-    // console.log("functionality: " + functionality)
-    // console.log("index: " + index)
-
-    // console.log("before:");
-    // for (let i = 0; i < arrayRows; i++) {
-    //     console.log(PuzzleArray[i]);
-    // }
 
     // find the location
     for (let i = 0; i < arrayRows; i++) {
         if (PuzzleArray[i].includes(index)) {
             var changedIndex = PuzzleArray[i].indexOf(index);
             var changedValue = PuzzleArray[i][changedIndex]
-            console.log("changedValue: "+changedValue)
 
             switch (functionality) {
                 case moveRight:
@@ -221,13 +202,9 @@ function updateZeroPlacement(index) {
                     PuzzleArray[i][changedIndex] = 0;
                     break;
             } // switch end
+
+            // do this only once
+            break;
         } // if end 
     } // for end 
-
-    // console.log("after:");
-    // for (let i = 0; i < arrayRows; i++) {
-    //     console.log(PuzzleArray[i]);
-    // }
-
-    console.log("----------------------------------------------------------------");
 }
