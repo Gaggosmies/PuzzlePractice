@@ -21,7 +21,7 @@ var zeroIndexX;
 var zeroIndexY;
 
 // array definations
-const arrayRows = 4;
+const arrayRows = 5;
 const arrayColumns = 5;
 var i, j;
 var index = 0;
@@ -116,6 +116,10 @@ function pieceClick(index) {
     }
 
     updateZeroPlacement(index);
+
+    if (checkIfComplete()) {
+        alert("Yay you win!");
+    }
 }
 
 function findMovablePieces() {
@@ -174,7 +178,7 @@ function updateZeroPlacement(index) {
     if (index == moveLeftID) { functionality = moveRight };
     if (index == moveRightID) { functionality = moveLeft };
 
-    if (typeof functionality === 'undefined'){
+    if (typeof functionality === 'undefined') {
         return;
     }
 
@@ -207,4 +211,41 @@ function updateZeroPlacement(index) {
             break;
         } // if end 
     } // for end 
+}
+
+function checkIfComplete() {
+    var lowest = 0;
+    var maxIndex = arrayRows * arrayColumns - 1;
+    var index = 0;
+    var isComplete = true;
+
+    for (let i = 0; i < arrayRows; i++) {
+        for (let j = 0; j < arrayColumns; j++) {
+            // check if last is 0
+            if (PuzzleArray[arrayRows - 1][arrayColumns - 1]) {
+                isComplete = false;
+                break;
+            }
+
+            // skip 0, not used in checking if in order
+            if (PuzzleArray[i][j] == 0) {
+                continue;
+            }
+
+            // check if in order
+            if (PuzzleArray[i][j] > lowest) {
+                lowest = PuzzleArray[i][j]
+            }
+            else {
+                isComplete = false;
+                break;
+            }
+
+            index++;
+        } //for end
+        // if not complete flag set, just stop
+        if (!isComplete) { break };
+    } // for end
+
+    return isComplete;
 }
