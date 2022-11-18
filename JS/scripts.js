@@ -12,6 +12,11 @@ var moveDownID;
 var moveRightID;
 var moveLeftID;
 
+const moveUp = 0;
+const moveDown = 1;
+const moveRight = 2;
+const moveLeft = 3;
+
 var zeroIndexX;
 var zeroIndexY;
 
@@ -90,25 +95,27 @@ function pieceClick(index) {
     var moveToPx;
 
     if (index == moveLeftID) {
-        moveToPx = movingPiece.style.left.replace("px", "");
-        moveToPx += width;
+        moveToPx = parseInt(movingPiece.style.left.replace("px", ""));
+        moveToPx += parseInt(width);
         movingPiece.style.left = moveToPx + "px";
     }
     if (index == moveRightID) {
-        moveToPx = movingPiece.style.left.replace("px", "");
-        moveToPx -= width;
+        moveToPx = parseInt(movingPiece.style.left.replace("px", ""));
+        moveToPx -= parseInt(width);
         movingPiece.style.left = moveToPx + "px";
     }
     if (index == moveUpID) {
-        moveToPx = movingPiece.style.top.replace("px", "");
-        moveToPx += height;
+        moveToPx = parseInt(movingPiece.style.top.replace("px", ""));
+        moveToPx += parseInt(height);
         movingPiece.style.top = moveToPx + "px";
     }
     if (index == moveDownID) {
-        moveToPx = movingPiece.style.top.replace("px", "");
-        moveToPx -= height;
+        moveToPx = parseInt(movingPiece.style.top.replace("px", ""));
+        moveToPx -= parseInt(height);
         movingPiece.style.top = moveToPx + "px";
     }
+
+    updateZeroPlacement(index);
 }
 
 function findMovablePieces() {
@@ -119,46 +126,108 @@ function findMovablePieces() {
         }
     }
 
-    console.log("zeroIndexX: " + zeroIndexX);
-    console.log("zeroIndexY: " + zeroIndexY);
+    // console.log("zeroIndexX: " + zeroIndexX);
+    // console.log("zeroIndexY: " + zeroIndexY);
 
     // if far left
     if (zeroIndexX == 0) {
+        console.log("left");
         moveLeftID = 0; // disable button left
     }
     else {
-        moveLeftID = PuzzleArray[zeroIndexY][zeroIndexX-1];
+        moveLeftID = PuzzleArray[zeroIndexY][zeroIndexX - 1];
     }
 
     // if far right
-    if (zeroIndexX == arrayColumns) {
+    if (zeroIndexX > arrayColumns) {
+        console.log("right");
         moveRightID = 0; // disable button right
     }
     else {
-        moveRightID = PuzzleArray[zeroIndexY][zeroIndexX+1];
+        moveRightID = PuzzleArray[zeroIndexY][zeroIndexX + 1];
     }
 
     // if far top
     if (zeroIndexY == 0) {
+        console.log("top");
         moveUpID = 0; // disable button top
     }
     else {
-        moveUpID = PuzzleArray[zeroIndexY-1][zeroIndexX];
+        moveUpID = PuzzleArray[zeroIndexY - 1][zeroIndexX];
     }
 
     // if far low
-    if (zeroIndexY == arrayRows) {
+    if (zeroIndexY == arrayRows - 1) {
+        console.log("below");
         moveDownID = 0; // disable button below
     }
     else {
-        moveDownID = PuzzleArray[zeroIndexY+1][zeroIndexX];
+        moveDownID = PuzzleArray[zeroIndexY + 1][zeroIndexX];
     }
 
-    console.log("moveLeftID: " + moveLeftID);
-    console.log("moveRightID: " + moveRightID);
-    console.log("moveUpID: " + moveUpID);
-    console.log("moveDownID: " + moveDownID);
+    // console.log("moveLeftID: " + moveLeftID);
+    // console.log("moveRightID: " + moveRightID);
+    // console.log("moveUpID: " + moveUpID);
+    // console.log("moveDownID: " + moveDownID);
 }
 
 // run find movable pieces once in start
 findMovablePieces();
+
+function updateZeroPlacement(index) {
+    let functionality;
+
+    // if check which functionality should be used
+    if (index == moveUpID) { functionality = moveDown };
+    if (index == moveDownID) { functionality = moveUp };
+    if (index == moveLeftID) { functionality = moveRight };
+    if (index == moveRightID) { functionality = moveLeft };
+
+    if (typeof functionality === 'undefined'){
+        console.log("Returning...");
+        return;
+    }
+
+    // console.log("functionality: " + functionality)
+    // console.log("index: " + index)
+
+    // console.log("before:");
+    // for (let i = 0; i < arrayRows; i++) {
+    //     console.log(PuzzleArray[i]);
+    // }
+
+    // find the location
+    for (let i = 0; i < arrayRows; i++) {
+        if (PuzzleArray[i].includes(index)) {
+            var changedIndex = PuzzleArray[i].indexOf(index);
+            var changedValue = PuzzleArray[i][changedIndex]
+            console.log("changedValue: "+changedValue)
+
+            switch (functionality) {
+                case moveRight:
+                    PuzzleArray[i][changedIndex + 1] = changedValue;
+                    PuzzleArray[i][changedIndex] = 0;
+                    break;
+                case moveLeft:
+                    PuzzleArray[i][changedIndex - 1] = changedValue;
+                    PuzzleArray[i][changedIndex] = 0;
+                    break;
+                case moveDown:
+                    PuzzleArray[i + 1][changedIndex] = changedValue;
+                    PuzzleArray[i][changedIndex] = 0;
+                    break;
+                case moveUp:
+                    PuzzleArray[i - 1][changedIndex] = changedValue;
+                    PuzzleArray[i][changedIndex] = 0;
+                    break;
+            } // switch end
+        } // if end 
+    } // for end 
+
+    // console.log("after:");
+    // for (let i = 0; i < arrayRows; i++) {
+    //     console.log(PuzzleArray[i]);
+    // }
+
+    console.log("----------------------------------------------------------------");
+}
